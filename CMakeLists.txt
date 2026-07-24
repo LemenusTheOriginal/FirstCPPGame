@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.16)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build raylib as static libraries" FORCE)
 
 add_subdirectory("thirdParty/raylib-6.0")
+add_subdirectory("thirdParty/imgui-docking")
+add_subdirectory("thirdParty/rlImGui")
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -80,7 +82,7 @@ endif()
 
 target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
-target_link_libraries ("${CMAKE_PROJECT_NAME}" PRIVATE raylib_static)
+target_link_libraries ("${CMAKE_PROJECT_NAME}" PRIVATE raylib_static imgui rlImGui)
 
 
 
