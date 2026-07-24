@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
+# Ensure that raylib built as static libraries
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build raylib as static libraries" FORCE)
+
+add_subdirectory("thirdParty/raylib-6.0")
+
 set(CMAKE_CXX_STANDARD 17)
 
 #! ! ! ! ! ! !
@@ -16,7 +21,6 @@ add_compile_options(/arch:AVX2) #make sure SIMD optimizations take place
 else()
 	add_compile_options(-mavx2 -mfma) # make sure SIMD optimizations take place, but on linux and other platforms
 endif()
-
 
 
 project(mygame)
@@ -75,6 +79,8 @@ endif()
 
 
 target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/")
+
+target_link_libraries ("${CMAKE_PROJECT_NAME}" PRIVATE raylib_static)
 
 
 
