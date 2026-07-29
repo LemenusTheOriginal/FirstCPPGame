@@ -1,13 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 
-# Ensure that raylib built as static libraries
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build raylib as static libraries" FORCE)
-
-add_subdirectory("thirdParty/raylib-6.0")
-add_subdirectory("thirdParty/imgui-docking")
-add_subdirectory("thirdParty/rlImGui")
-
-set(CMAKE_CXX_STANDARD 17)
+if(MSVC)
+	add_compile_options(/Zc:__cplusplus)
+endif()
 
 #! ! ! ! ! ! !
 #set this to ON instead of OFF to ship the game!
@@ -25,18 +20,33 @@ else()
 endif()
 
 
+# Ensure raylib is built as static libraries
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Raylib as static libraries" FORCE)
+
 project(mygame)
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+#add raylib, and here you would add other libraries if needed!
+add_subdirectory(thirdparty/raylib-6.0)
+add_subdirectory(thirdparty/imgui-docking)
+add_subdirectory(thirdparty/rlImgui)
 
 
 # MY_SOURCES is defined to be a list of all the source files for my game 
 # DON'T ADD THE SOURCES BY HAND, they are already added with this macro
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
+
 add_executable("${CMAKE_PROJECT_NAME}")
 
-set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 17)
-
+set_target_properties("${CMAKE_PROJECT_NAME}" PROPERTIES
+	CXX_STANDARD 23
+	CXX_STANDARD_REQUIRED ON
+	CXX_EXTENSIONS OFF
+)
 
 
 if(PRODUCTION_BUILD)
@@ -80,12 +90,13 @@ elseif(APPLE OR UNIX) # macOS / Linux
 endif()
 
 
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/")
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/gameLayer/")
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/platform")
+target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/gameLayer")
 
-target_link_libraries ("${CMAKE_PROJECT_NAME}" PRIVATE raylib_static imgui rlImGui)
 
+
+# Link raylib library statically, Here wou would add other libraries!
+target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE raylib_static imgui rlImGui )
 
 
 

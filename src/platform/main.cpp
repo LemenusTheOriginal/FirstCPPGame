@@ -5,15 +5,21 @@
 #include <rlImGui.h>
 #include <imgui.h>
 #include "ImGUIThemes.h"
-#include "imguiDebug.h"
+#include "debug.h"
 
 #include "gameMain.h"
+#include "asserts.h"
 
 int main()
 {
 #if PRODUCTION_BUILD == 1
 	SetTraceLogLevel(LOG_NONE);
 #endif
+
+#ifdef _MSVC_LANG
+	std::cout << "_MSVC_LANG: " << _MSVC_LANG << '\n';
+#endif
+	std::cout << "__cplusplus: " << __cplusplus << '\n';
 
 	// Window
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE); // Make window resizable
@@ -45,15 +51,13 @@ int main()
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 		ImGui::PopStyleColor(2);
 #pragma endregion
+
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
-		if (!updateGame())
-		{
-			CloseWindow();
-		}
+		if (!updateGame()) CloseWindow();
 
-		imguiDebug();
+		//imguiDebug();
 
 		rlImGuiEnd();
 		EndDrawing();
@@ -61,7 +65,6 @@ int main()
 
 	CloseWindow();
 	closeGame();
-
 	rlImGuiShutdown();
 
 	return 0;

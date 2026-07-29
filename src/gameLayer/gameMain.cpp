@@ -1,31 +1,32 @@
+#include <iostream>
+
 #include <raylib.h>
-#include <string_view>
+
 #include "gameMain.h"
+#include "debug.h"
+
+struct GameData
+{
+	Texture dirtTexture;
+}gameData;
+GameData &getGameData() { return gameData; }
 
 bool initGame()
 {
+	writeLog("Start");
+
 	return true;
 }
 
 bool updateGame()
 {
-	std::string_view static dynamicText = "Press SPACE to change this text!";
-
-	if (IsKeyPressed(KEY_SPACE)) {
-		dynamicText = "Text changed successfully!";
-	}
-	else if (IsKeyReleased(KEY_SPACE))
-	{
-		dynamicText = "Press SPACE to change this text!";
-	}
-	DrawText(dynamicText.data(), 400, 200, 20, RED);
-
-	DrawRectangle(75, 75, 100, 100, { 0, 255, 0, 127 });
-	DrawRectangle(50, 50, 100, 100, { 255, 0, 0, 127 });
+	float deltaTime = GetFrameTime();
+	if (deltaTime > 1.f / 5) deltaTime = 1 / 5.f;
 
 	return true;
 }
 
 void closeGame()
 {
+	writeLog("Closed");
 }
