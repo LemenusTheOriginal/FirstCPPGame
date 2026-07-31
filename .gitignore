@@ -8,6 +8,7 @@ CMakeSettings.json
 Makefile
 src/.vs
 resources/Log.txt
+Log.txt
 
 settings/
 saves/
