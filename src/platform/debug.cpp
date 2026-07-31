@@ -9,6 +9,7 @@
 #include "debug.h"
 #include "ImGUIThemes.h"
 
+// basic logger function for logging start/closing of program with date
 bool writeLog(std::string_view message)
 {
 	std::ofstream outputFile(RESOURCES_PATH "Log.txt", std::ios::app);
